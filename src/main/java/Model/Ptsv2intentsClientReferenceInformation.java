@@ -29,12 +29,33 @@ import java.io.IOException;
  */
 
 public class Ptsv2intentsClientReferenceInformation {
+  @SerializedName("code")
+  private String code = null;
+
   @SerializedName("reconciliationId")
   private String reconciliationId = null;
+
+  public Ptsv2intentsClientReferenceInformation code(String code) {
+    this.code = code;
+    return this;
+  }
 
   public Ptsv2intentsClientReferenceInformation reconciliationId(String reconciliationId) {
     this.reconciliationId = reconciliationId;
     return this;
+  }
+
+  /**
+   * Merchant-generated order reference or tracking number. It is recommended that you send a unique value for each transaction so that you can perform meaningful searches for the transaction.  #### Used by **Authorization** Required field.  #### PIN Debit Requests for PIN debit reversals need to use the same merchant reference number that was used in the transaction that is being reversed.  Required field for all PIN Debit requests (purchase, credit, and reversal).  #### FDC Nashville Global Certain circumstances can cause the processor to truncate this value to 15 or 17 characters for Level II and Level III processing, which can cause a discrepancy between the value you submit and the value included in some processor reports.
+   * @return code
+   **/
+  @ApiModelProperty(value = "Merchant-generated order reference or tracking number. It is recommended that you send a unique value for each transaction so that you can perform meaningful searches for the transaction.  #### Used by **Authorization** Required field.  #### PIN Debit Requests for PIN debit reversals need to use the same merchant reference number that was used in the transaction that is being reversed.  Required field for all PIN Debit requests (purchase, credit, and reversal).  #### FDC Nashville Global Certain circumstances can cause the processor to truncate this value to 15 or 17 characters for Level II and Level III processing, which can cause a discrepancy between the value you submit and the value included in some processor reports. ")
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
   }
 
    /**
@@ -60,12 +81,13 @@ public class Ptsv2intentsClientReferenceInformation {
       return false;
     }
     Ptsv2intentsClientReferenceInformation ptsv2intentsClientReferenceInformation = (Ptsv2intentsClientReferenceInformation) o;
-    return Objects.equals(this.reconciliationId, ptsv2intentsClientReferenceInformation.reconciliationId);
+    return Objects.equals(this.reconciliationId, ptsv2intentsClientReferenceInformation.reconciliationId) &&
+            Objects.equals(this.code, ptsv2intentsClientReferenceInformation.code);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reconciliationId);
+    return Objects.hash(code, reconciliationId);
   }
 
 
@@ -93,6 +115,7 @@ public class Ptsv2intentsClientReferenceInformation {
     sb.append("class Ptsv2intentsClientReferenceInformation {\n");
     
     if (reconciliationId != null) sb.append("    reconciliationId: ").append(SENSITIVE_FIELD_PATTERN.matcher("reconciliationId").matches() ? "[REDACTED]" : toIndentedString(reconciliationId)).append("\n");
+    if (code != null) sb.append("    code: ").append(SENSITIVE_FIELD_PATTERN.matcher("code").matches() ? "[REDACTED]" : toIndentedString(code)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -112,6 +135,7 @@ public class Ptsv2intentsClientReferenceInformation {
     sb.append("class Ptsv2intentsClientReferenceInformation {\n");
     
     if (reconciliationId != null) sb.append("    reconciliationId: ").append(toIndentedString(reconciliationId)).append("\n");
+    if (code != null) sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("}");
     return sb.toString();
   }

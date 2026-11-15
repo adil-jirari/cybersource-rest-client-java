@@ -48504,6 +48504,10 @@
                             "title": "ptsV2CreateOrderPost201Response",
                             "type": "object",
                             "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "A unique identification number assigned by CyberSource to identify the order request. Use this id to call subsequent services such as the authorization API."
+                                },
                                 "submitTimeUtc": {
                                     "type": "string",
                                     "description": "Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ`\n**Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.).\nThe `T` separates the date and the time. The `Z` indicates UTC.\n\nReturned by Cybersource for all services.\n"
@@ -48588,9 +48592,494 @@
                                             "description": "Your identifier for the customer.\n\nWhen a subscription or customer profile is being created, the maximum length for this field for most processors is 30. Otherwise, the maximum length is 100.\n\n#### Comercio Latino\nFor recurring payments in Mexico, the value is the customer's contract number.\nNote Before you request the authorization, you must inform the issuer of the customer contract numbers that will be used for recurring transactions.\n\n#### Worldpay VAP\nFor a follow-on credit with Worldpay VAP, CyberSource checks the following locations, in the order\ngiven, for a customer account ID value and uses the first value it finds:\n1. `customer_account_id` value in the follow-on credit request\n2. Customer account ID value that was used for the capture that is being credited\n3. Customer account ID value that was used for the original authorization\nIf a customer account ID value cannot be found in any of these locations, then no value is used.\n"
                                         }
                                     }
+                                },
+                                "riskInformation": {
+                                    "type": "object",
+                                    "description": "Contains the result of risk assessment.",
+                                    "properties": {
+                                        "profile": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "maxLength": 30,
+                                                    "description": "Name of the active profile chosen by the profile selector. If no profile selector exists,\nthe default active profile is chosen.\n\n**Note** By default, your default profile is the active profile, or the Profile Selector chooses the active profile. Use this field\nonly if you want to specify the name of a different profile. The passed-in profile will then become the active profile.\n"
+                                                },
+                                                "desinationQueue": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Name of the queue where orders that are not automatically accepted are sent.\n"
+                                                },
+                                                "selectorRule": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Name of the profile selector rule that chooses the profile to use for the\ntransaction. If no profile selector exists, the value is Default Active Profile.\n"
+                                                },
+                                                "earlyDecision": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Early decision inside the profile. For example, ACCEPT."
+                                                }
+                                            }
+                                        },
+                                        "rules": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "maxLength": 255,
+                                                        "description": "Description of the rule as it appears in the Profile Editor."
+                                                    },
+                                                    "decision": {
+                                                        "type": "string",
+                                                        "maxLength": 255,
+                                                        "description": "Summarizes the result for the rule according to the setting that you chose in the Profile Editor.\nThis field can contain one of the following values:\n- `IGNORE`\n- `REVIEW`\n- `REJECT`\n- `ACCEPT`\n"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "infoCodes": {
+                                            "type": "object",
+                                            "properties": {
+                                                "velocity": {
+                                                    "type": "array",
+                                                    "description": "List of information codes triggered by the order. These information codes were generated when you created\nthe order and product velocity rules and are returned so that you can associate them with the rules.\n",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "description": "Indicates excessive volume of transactions."
+                                                    }
+                                                },
+                                                "address": {
+                                                    "type": "array",
+                                                    "description": "Indicates a mismatch between the customer's billing and shipping addresses.\n",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "customerList": {
+                                                    "type": "array",
+                                                    "description": "Indicates that customer information is associated with transactions that are either on the negative or\nthe positive list.\n",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "deviceBehavior": {
+                                                    "type": "array",
+                                                    "description": "Indicates the device behavior information code(s) returned from device fingerprinting.\n",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "identityChange": {
+                                                    "type": "array",
+                                                    "description": "Indicates excessive identity changes. The threshold is variable depending on the identity elements being\ncompared.\n",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "internet": {
+                                                    "type": "array",
+                                                    "description": "Indicates a problem with the customer's email address, IP address, or billing address.\n",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "phone": {
+                                                    "type": "array",
+                                                    "description": "Indicates a problem with the customer's phone number.\n",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "suspicious": {
+                                                    "type": "array",
+                                                    "description": "Indicates that the customer provided potentially suspicious information.\n",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "globalVelocity": {
+                                                    "type": "array",
+                                                    "description": "Indicates that the customer has a high purchase frequency.\n",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "velocity": {
+                                            "type": "object",
+                                            "properties": {
+                                                "morphing": {
+                                                    "type": "array",
+                                                    "description": "List of information codes triggered by the order. These information codes were generated when you created the order and product velocity rules and are returned so that you can associate them with the rules.\n\nReturned by scoring service.\n",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "count": {
+                                                                "type": "integer",
+                                                                "maxLength": 5,
+                                                                "description": "Morphing count specified by the number #.\n\n**Note** The count is not returned for the initial transaction.\n"
+                                                            },
+                                                            "fieldName": {
+                                                                "type": "string",
+                                                                "maxLength": 255,
+                                                                "description": "Field name of the morphing element. specified by the setting that you chose in the\nVelocity Editor.\n\nFor all possible values, see the `decisionReply_morphingElement_#_fieldName` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                                            },
+                                                            "informationCode": {
+                                                                "type": "string",
+                                                                "maxLength": 255,
+                                                                "description": "Identifier that CyberSource assigned to the velocity rule specified by the number #.\n\nFor all possible values, see the `decision_velocity_morphing_#_info_code` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > \n"
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "address": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "maxLength": 255,
+                                                        "description": "Indicates a mismatch between the customer's billing and shipping addresses.\n\nFor all possible values, see the `score_address_info` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "casePriority": {
+                                            "type": "integer",
+                                            "maxLength": 1,
+                                            "description": "You receive this field only if you subscribe to the Enhanced Case Management service. The priority level ranges from 1 (highest) to 5 (lowest); the default value is 3. If you do not assign a priority to your rules or to your profiles, the default value is given to the order.\n\nFor all possible values, see the `decision_case_priority` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                        },
+                                        "localTime": {
+                                            "type": "string",
+                                            "maxLength": 255,
+                                            "description": "The customer's local time (`hh:mm:ss`), which is calculated from the transaction request time and the\ncustomer's billing address.\n\nFor details, see the `score_time_local` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/)\n"
+                                        },
+                                        "score": {
+                                            "type": "object",
+                                            "properties": {
+                                                "factorCodes": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "description": "This field contains information that affected the score of the order.\nThis field will contain one or more codes, separated by carets (^).\n\nFor all possible values, see the `score_factors` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                                    }
+                                                },
+                                                "modelUsed": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Name of the score model used for the transaction. If you did not include a custom model in your request,\nthis field contains the name of CyberSource's default model.\n\nFor all possible values, see the `score_model_used` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                                },
+                                                "result": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Total score calculated for this order. The value cannot be negative.\n\nFor all possible values, see the `score_score_result` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                                }
+                                            }
+                                        },
+                                        "ipAddress": {
+                                            "type": "object",
+                                            "description": "Contains detailed response information about the customer's IP address.",
+                                            "properties": {
+                                                "anonymizerStatus": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Indicates whether the transaction IP address is associated with a known anonymous proxy.\n\nFor all possible values, see the `score_ip_anonymizer_status` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                                },
+                                                "locality": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Name of the city decoded from the IP address used directly or indirectly by the customer to send the order.\n\nFor all possible values, see the `score_ip_city` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                                },
+                                                "country": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Name of the country decoded from the IP address used directly or indirectly by the customer to send the order.\n\nFor all possible values, see the `score_ip_country` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                                },
+                                                "administrativeArea": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Name of the state decoded from the IP address used directly or indirectly by the customer to send the order.\n\nFor all possible values, see the `score_ip_state` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                                },
+                                                "routingMethod": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Routing method decoded from the IP address used directly or indirectly by the customer to send the order.\n\nFor all possible values, see the `score_ip_routing_method` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n"
+                                                },
+                                                "carrier": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "Provides the name of the organization that owns the ASN. The carrier is responsible for the traffic carried on the network or set of networks designated as an Autonomous System (AS) and identified by the ASN.\nWhile there are more than 27,000 active ASNs, there are fewer carriers, because a single carrier often manages several ASNs.\n"
+                                                },
+                                                "organization": {
+                                                    "type": "string",
+                                                    "maxLength": 255,
+                                                    "description": "The Registering Organization is the entity responsible for the actions and content associated with a given block of IP addresses. This is in contrast to the carrier, which is responsible for the routing of traffic for network blocks. Registering Organizations include many types of entities, including corporate, government, or educational entities, and ISPs managing the allocation and use of network blocks.\n"
+                                                }
+                                            }
+                                        },
+                                        "providers": {
+                                            "type": "object",
+                                            "description": "Name of the 3rd party provider, for example, Emailage.\nFor all possible values, see the `decision_provider_#_name` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).",
+                                            "additionalProperties": {
+                                                "type": "object",
+                                                "description": "Field name, for example, email address domain name (domain_name).\n\nFor all possible values, see the `decision_provider_#_field_#_name` field description in the _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link).\n",
+                                                "additionalProperties": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "travel": {
+                                            "type": "object",
+                                            "properties": {
+                                                "actualFinalDestination": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "country": {
+                                                            "type": "string",
+                                                            "maxLength": 90,
+                                                            "description": "Country of actual final destination on the route."
+                                                        },
+                                                        "locality": {
+                                                            "type": "string",
+                                                            "maxLength": 90,
+                                                            "description": "City of actual final destination on the route."
+                                                        },
+                                                        "latitude": {
+                                                            "type": "string",
+                                                            "maxLength": 10,
+                                                            "description": "Latitude of actual final destination on the route."
+                                                        },
+                                                        "longitude": {
+                                                            "type": "string",
+                                                            "maxLength": 10,
+                                                            "description": "Longitude of actual final destination on the route."
+                                                        }
+                                                    }
+                                                },
+                                                "firstDeparture": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "country": {
+                                                            "type": "string",
+                                                            "maxLength": 90,
+                                                            "description": "Country of first departure on the route."
+                                                        },
+                                                        "locality": {
+                                                            "type": "string",
+                                                            "maxLength": 90,
+                                                            "description": "City of first departure on the route."
+                                                        },
+                                                        "latitude": {
+                                                            "type": "string",
+                                                            "maxLength": 10,
+                                                            "description": "Latitude of first departure on the route."
+                                                        },
+                                                        "longitude": {
+                                                            "type": "string",
+                                                            "maxLength": 10,
+                                                            "description": "Longitude of first departure on the route."
+                                                        }
+                                                    }
+                                                },
+                                                "firstDestination": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "country": {
+                                                            "type": "string",
+                                                            "maxLength": 90,
+                                                            "description": "Country of first destination on the route."
+                                                        },
+                                                        "locality": {
+                                                            "type": "string",
+                                                            "maxLength": 90,
+                                                            "description": "City of first destination on the route."
+                                                        },
+                                                        "latitude": {
+                                                            "type": "string",
+                                                            "maxLength": 10,
+                                                            "description": "Latitude of first destination on the route."
+                                                        },
+                                                        "longitude": {
+                                                            "type": "string",
+                                                            "maxLength": 10,
+                                                            "description": "Longitude of first destination on the route."
+                                                        }
+                                                    }
+                                                },
+                                                "lastDestination": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "country": {
+                                                            "type": "string",
+                                                            "maxLength": 90,
+                                                            "description": "Country of last destination on the route."
+                                                        },
+                                                        "locality": {
+                                                            "type": "string",
+                                                            "maxLength": 90,
+                                                            "description": "City of last destination on the route."
+                                                        },
+                                                        "latitude": {
+                                                            "type": "string",
+                                                            "maxLength": 10,
+                                                            "description": "Latitude of last destination on the route."
+                                                        },
+                                                        "longitude": {
+                                                            "type": "string",
+                                                            "maxLength": 10,
+                                                            "description": "Longitude of last destination on the route."
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "processorResults": {
+                                            "type": "object",
+                                            "properties": {
+                                                "fraudDecision": {
+                                                    "type": "string",
+                                                    "maxLength": 60,
+                                                    "description": "Type of filter. Possible values:\n- ACCEPT\n- PENDING\n- DENY\n- REPORT\n"
+                                                },
+                                                "fraudDecisionReason": {
+                                                    "type": "string",
+                                                    "maxLength": 60,
+                                                    "description": "possible values\n- AVS_NO_MATCH\n- AVS_PARTIAL_MATCH\n- AVS_UNAVAILABLE_OR_UNSUPPORTED\n- CARD_SECURITY_CODE_MISMATCH\n- MAXIMUM_TRANSACTION_AMOUNT\n- UNCONFIRMED_ADDRESS\n- COUNTRY_MONITOR\n- LARGE_ORDER_NUMBER\n- BILLING_OR_SHIPPING_ADDRESS_MISMATCH\n- RISKY_ZIP_CODE\n- SUSPECTED_FREIGHT_FORWARDER_CHECK\n- TOTAL_PURCHASE_PRICE_MINIMUM\n- IP_ADDRESS_VELOCITY\n- RISKY_EMAIL_ADDRESS_DOMAIN_CHECK\n- RISKY_BANK_IDENTIFICATION_NUMBER_CHECK,\nRISKY_IP_ADDRESS_RANGE\n- PAYPAL_FRAUD_MODEL\n"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "embeddedActions": {
+                                    "type": "object",
+                                    "description": "Contains embedded actions, that includes status and response for every actions in the list.",
+                                    "properties": {
+                                        "CAPTURE": {
+                                            "type": "object",
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "description": "The status of the submitted transaction.\n\nPossible values:\n - PENDING\n - TRANSMITTED (Only for Online Capture enabled merchants)\n"
+                                                },
+                                                "reason": {
+                                                    "type": "string",
+                                                    "description": "The reason of the status.\n\nPossible values:\n - MISSING_FIELD\n - INVALID_DATA\n - DUPLICATE_REQUEST\n - INVALID_MERCHANT_CONFIGURATION\n - EXCEEDS_AUTH_AMOUNT\n - AUTH_ALREADY_REVERSED\n - TRANSACTION_ALREADY_SETTLED\n - INVALID_AMOUNT\n - MISSING_AUTH\n - TRANSACTION_ALREADY_REVERSED_OR_SETTLED\n - NOT_SUPPORTED\n"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "description": "The detail message related to the status and reason listed above."
+                                                }
+                                            }
+                                        },
+                                        "DECISION": {
+                                            "type": "object",
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "description": "The status of the submitted transaction.\n\nPossible values:\n  - `ACCEPTED`\n  - `REJECTED`\n  - `PENDING_REVIEW`\n  - `DECLINED`\n  - `PENDING_AUTHENTICATION`\n  - `INVALID_REQUEST`\n  - `AUTHENTICATION_FAILED`\n  - `CHALLENGE`\n"
+                                                },
+                                                "reason": {
+                                                    "type": "string",
+                                                    "description": "The reason of the status.\n\nPossible values:\n - `EXPIRED_CARD`\n - `SCORE_EXCEEDS_THRESHOLD`\n - `DECISION_PROFILE_REVIEW`\n - `DECISION_PROFILE_REJECT`\n - `CONSUMER_AUTHENTICATION_REQUIRED`\n - `INVALID_MERCHANT_CONFIGURATION`\n - `CONSUMER_AUTHENTICATION_FAILED`\n - `DECISION_PROFILE_CHALLENGE`\n - `CUSTOMER_WATCHLIST_MATCH`\n - `ADDRESS_COUNTRY_WATCHLIST_MATCH`\n - `EMAIL_COUNTRY_WATCHLIST_MATCH`\n - `IP_COUNTRY_WATCHLIST_MATCH`\n"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "description": "The detail message related to the status and reason listed above."
+                                                }
+                                            }
+                                        },
+                                        "CONSUMER_AUTHENTICATION": {
+                                            "type": "object",
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "description": "The status for payerAuthentication 201 enroll and validate calls. Possible values are:\n- `AUTHENTICATION_SUCCESSFUL`\n- `PENDING_AUTHENTICATION`\n- `AUTHENTICATION_FAILED`\n"
+                                                },
+                                                "reason": {
+                                                    "type": "string",
+                                                    "description": "The reason of the status. Possible values are:\n- `INVALID_MERCHANT_CONFIGURATION`\n- `CONSUMER_AUTHENTICATION_REQUIRED`\n- `CONSUMER_AUTHENTICATION_FAILED`\n- `AUTHENTICATION_FAILED`\n"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "description": "The message describing the reason of the status. Value is:\n- Encountered a Payer Authentication problem. Payer could not be authenticated.\n"
+                                                }
+                                            }
+                                        },
+                                        "VALIDATE_CONSUMER_AUTHENTICATION": {
+                                            "type": "object",
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "description": "The status for payerAuthentication 201 enroll and validate calls. Possible values are:\n- `AUTHENTICATION_SUCCESSFUL`\n- `PENDING_AUTHENTICATION`\n- `AUTHENTICATION_FAILED`\n"
+                                                },
+                                                "reason": {
+                                                    "type": "string",
+                                                    "description": "The reason of the status. Possible values are:\n- `INVALID_MERCHANT_CONFIGURATION`\n- `CONSUMER_AUTHENTICATION_REQUIRED`\n- `CONSUMER_AUTHENTICATION_FAILED`\n- `AUTHENTICATION_FAILED`\n"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "description": "The message describing the reason of the status. Value is:\n- Encountered a Payer Authentication problem. Payer could not be authenticated.\n"
+                                                }
+                                            }
+                                        },
+                                        "WATCHLIST_SCREENING": {
+                                            "type": "object",
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "description": "The status for the call can be:\n- COMPLETED\n- INVALID_REQUEST\n- DECLINED\n"
+                                                },
+                                                "reason": {
+                                                    "type": "string",
+                                                    "description": "The reason of the status. Value can be\n  - `CUSTOMER_WATCHLIST_MATCH`\n  - `ADDRESS_COUNTRY_WATCHLIST_MATCH`\n  - `EMAIL_COUNTRY_WATCHLIST_MATCH`\n  - `IP_COUNTRY_WATCHLIST_MATCH`\n  - `INVALID_MERCHANT_CONFIGURATION`\n"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "description": "The message describing the reason of the status. Value can be\n  - The customer matched the Denied Parties List\n  - The Export bill_country/ship_country  match\n  - Export email_country match\n  - Export hostname_country/ip_country match\n"
+                                                }
+                                            }
+                                        },
+                                        "TOKEN_CREATE": {
+                                            "type": "object",
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "description": "The status of the token create.\n\nPossible value is:\n  - SUCCESS\n  - SERVER_ERROR\n  - INVALID_REQUEST\n"
+                                                },
+                                                "reason": {
+                                                    "type": "string",
+                                                    "description": "The reason of the status.\n\nPossible values:\n - INVALID_DATA\n - SYSTEM_ERROR\n - MISSING_FIELD\n"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "description": "The detail message related to the status and reason listed above."
+                                                }
+                                            }
+                                        },
+                                        "TOKEN_UPDATE": {
+                                            "type": "object",
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "description": "The status of the token update.\n\nPossible value is:\n  - SUCCESS\n  - SERVER_ERROR\n  - INVALID_REQUEST\n"
+                                                },
+                                                "reason": {
+                                                    "type": "string",
+                                                    "description": "The reason of the status.\nPossible values:\n - INVALID_DATA\n - SYSTEM_ERROR\n - MISSING_FIELD\n"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "description": "The detail message related to the status and reason listed above."
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             },
                             "example": {
+                                "id": "7860981746596529204805",
                                 "submitTimeUtc": "2024-06-01T071957Z",
                                 "updateTimeUtc": "2024-06-01T071957Z",
                                 "status": "CREATED",
@@ -48600,7 +49089,37 @@
                                 },
                                 "processorInformation": {
                                     "transactionId": "1234qwerty1234"
-                                }
+                                },
+                                "riskInformation": {
+                                  "localTime": "0:22:54",
+                                  "score": {
+                                      "result": "9",
+                                      "factorCodes": [
+                                          "H",
+                                          "P"
+                                      ],
+                                      "modelUsed": "default"
+                                  },
+                                  "infoCodes": {
+                                      "suspicious": [
+                                          "MUL-EM",
+                                          "RISK-TS"
+                                      ],
+                                      "identityChange": [
+                                          "MORPH-C",
+                                          "MORPH-E"
+                                      ]
+                                  },
+                                  "profile": {
+                                      "earlyDecision": "ACCEPT"
+                                  },
+                                  "casePriority": "3"
+                              },
+                              "embeddedActions": {
+                                  "DECISION": {
+                                      "status": "ACCEPTED"
+                                  }
+                              }
                             }
                         }
                     },

@@ -38,6 +38,9 @@ public class PtsV2PaymentsPost201ResponseRiskInformationProfile {
   @SerializedName("selectorRule")
   private String selectorRule = null;
 
+  @SerializedName("earlyDecision")
+  private String earlyDecision = null;
+
   public PtsV2PaymentsPost201ResponseRiskInformationProfile name(String name) {
     this.name = name;
     return this;
@@ -80,7 +83,7 @@ public class PtsV2PaymentsPost201ResponseRiskInformationProfile {
   }
 
    /**
-   * Name of the profile selector rule that chooses the profile to use for the transaction. If no profile selector exists, the value is Default Active Profile. 
+   * Name of the profile selector rule that chooses the profile to use for the transaction. If no profile selector exists, the value is Default Active Profile.
    * @return selectorRule
   **/
   @ApiModelProperty(value = "Name of the profile selector rule that chooses the profile to use for the transaction. If no profile selector exists, the value is Default Active Profile. ")
@@ -90,6 +93,19 @@ public class PtsV2PaymentsPost201ResponseRiskInformationProfile {
 
   public void setSelectorRule(String selectorRule) {
     this.selectorRule = selectorRule;
+  }
+
+  /**
+   * Early decision inside the profile. For example, ACCEPT.
+   * @return earlyDecision
+   **/
+  @ApiModelProperty(value = "Early decision inside the profile. For example ACCEPT. ")
+  public String getEarlyDecision() {
+    return earlyDecision;
+  }
+
+  public void setEarlyDecision(String earlyDecision) {
+    this.earlyDecision = earlyDecision;
   }
 
 
@@ -104,12 +120,13 @@ public class PtsV2PaymentsPost201ResponseRiskInformationProfile {
     PtsV2PaymentsPost201ResponseRiskInformationProfile ptsV2PaymentsPost201ResponseRiskInformationProfile = (PtsV2PaymentsPost201ResponseRiskInformationProfile) o;
     return Objects.equals(this.name, ptsV2PaymentsPost201ResponseRiskInformationProfile.name) &&
         Objects.equals(this.desinationQueue, ptsV2PaymentsPost201ResponseRiskInformationProfile.desinationQueue) &&
-        Objects.equals(this.selectorRule, ptsV2PaymentsPost201ResponseRiskInformationProfile.selectorRule);
+        Objects.equals(this.selectorRule, ptsV2PaymentsPost201ResponseRiskInformationProfile.selectorRule) &&
+        Objects.equals(this.earlyDecision, ptsV2PaymentsPost201ResponseRiskInformationProfile.earlyDecision);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, desinationQueue, selectorRule);
+    return Objects.hash(name, desinationQueue, selectorRule, earlyDecision);
   }
 
 
@@ -139,6 +156,7 @@ public class PtsV2PaymentsPost201ResponseRiskInformationProfile {
     if (name != null) sb.append("    name: ").append(SENSITIVE_FIELD_PATTERN.matcher("name").matches() ? "[REDACTED]" : toIndentedString(name)).append("\n");
     if (desinationQueue != null) sb.append("    desinationQueue: ").append(SENSITIVE_FIELD_PATTERN.matcher("desinationQueue").matches() ? "[REDACTED]" : toIndentedString(desinationQueue)).append("\n");
     if (selectorRule != null) sb.append("    selectorRule: ").append(SENSITIVE_FIELD_PATTERN.matcher("selectorRule").matches() ? "[REDACTED]" : toIndentedString(selectorRule)).append("\n");
+    if (earlyDecision != null) sb.append("    earlyDecision: ").append(SENSITIVE_FIELD_PATTERN.matcher("earlyDecision").matches() ? "[REDACTED]" : toIndentedString(earlyDecision)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -160,6 +178,7 @@ public class PtsV2PaymentsPost201ResponseRiskInformationProfile {
     if (name != null) sb.append("    name: ").append(toIndentedString(name)).append("\n");
     if (desinationQueue != null) sb.append("    desinationQueue: ").append(toIndentedString(desinationQueue)).append("\n");
     if (selectorRule != null) sb.append("    selectorRule: ").append(toIndentedString(selectorRule)).append("\n");
+    if (earlyDecision != null) sb.append("    earlyDecision: ").append(toIndentedString(earlyDecision)).append("\n");
     sb.append("}");
     return sb.toString();
   }

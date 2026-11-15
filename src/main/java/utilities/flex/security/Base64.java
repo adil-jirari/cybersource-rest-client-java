@@ -12,7 +12,7 @@ import java.io.IOException;
  * 
  * <code>byte[] myByteArray = Base64.decode( encoded );</code>
  *
- * <p>The <tt>options</tt> parameter, which appears in a few places, is used to pass 
+ * <p>The <code>options</code> parameter, which appears in a few places, is used to pass
  * several pieces of information to the encoder. In the "higher level" methods such as 
  * encodeBytes( bytes, options ) the options parameter can be used to indicate such 
  * things as first gzipping the bytes before encoding them, not inserting linefeeds,
@@ -753,7 +753,7 @@ public class Base64 {
 	 * @param options encode options such as URL_SAFE
 	 * @return the decoded data
 	 * @throws IOException if there is an error
-	 * @throws NullPointerException if <tt>s</tt> is null
+	 * @throws NullPointerException if <code>s</code> is null
 	 * @since 1.4
 	 */
 	public static byte[] decode( String s, int options ) throws IOException {
